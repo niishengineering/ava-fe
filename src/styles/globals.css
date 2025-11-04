@@ -1,0 +1,42 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* WebKit Browsers (Chrome, Safari) */
+*::-webkit-scrollbar {
+  width: 8px; /* Adjust scrollbar width */
+  
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff; /* White track color */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(222, 219, 219); /* Thumb color */
+  border-radius: 12px; /* Rounded corners for thumb */
+  height: 10px;
+ /* Padding effect using track color */
+}
+
+
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  
+  }
+  body {
+    @apply bg-background text-foreground;
+  
+  }
+  
+}
+
+
+
+

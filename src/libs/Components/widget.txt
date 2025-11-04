@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Embedded Chat Interface</title>
+  <style>
+    .chat-frame {
+      position: fixed;
+      bottom: 20px; /* Adjust as needed */
+      right: 20px;
+      height: 60px;
+      width: 60px;
+      border: none;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 10px; /* Optional for rounded corners */
+      overflow: hidden;
+      z-index: 1000; /* Ensure it sits above other elements */
+    }
+  </style>
+  <script>
+
+ 
+
+  </script>
+</head>
+<body>
+   
+  <iframe id="ava-frame" src="http://localhost:3000/chats/9e42ea23-eb5b-461a-b151-34c7adf7b292" title="Chat Interface" class="chat-frame"></iframe>
+  <script>
+       window.addEventListener('message', (event) => {
+      console.log('running')
+  if (event.data && event.data.height && event.data.width) {
+    const iframe = document.getElementById('ava-frame');
+
+    iframe.style.height = `${event.data.height}px`;
+    iframe.style.width = `${event.data.width}px`;
+  
+  }
+
+});
+
+ window.onload = () => {
+    const iframe = document.getElementById('ava-frame');
+    const parentUrl = window.location.href;
+
+    // Log the URL being sent
+    console.log("Sending URL to iframe:", parentUrl);
+
+    // Send the URL to the iframe
+    iframe.contentWindow.postMessage({ parentUrl }, 'http://localhost:3000'); // Replace with the iframe origin
+  };
+  </script>
+</body>
+</html>
+
+
+
+
+<style>
+    .chat-frame {
+      position: fixed;
+      bottom: 20px; /* Adjust as needed */
+      right: 20px;
+      height: 60px;
+      width: 60px;
+      border: none;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 10px; /* Optional for rounded corners */
+      overflow: hidden;
+      z-index: 1000; /* Ensure it sits above other elements */
+    }
+  </style>
+
+
+   
+  <iframe id="ava-frame" src="http://localhost:3000/chats/ede63282-fa90-407b-9850-2dbeaf586fc9" title="Chat Interface" class="chat-frame"></iframe>
+  <script>
+       window.addEventListener('message', (event) => {
+            if (event.data && event.data.height && event.data.width) {
+                const iframe = document.getElementById('ava-frame');
+                iframe.style.height = `${event.data.height}px`;
+                iframe.style.width = `${event.data.width}px`;
+            
+            }
+
+        });
+
+        const iframe = document.getElementById('ava-frame');
+        window.onload = () => {
+        setTimeout(() => {
+            const parentUrl = window.location.href;
+            iframe.contentWindow.postMessage({ parentUrl }, '*');
+            console.log('testing')
+        }, 500); // Small delay to ensure parent is ready
+        };
+  </script>
