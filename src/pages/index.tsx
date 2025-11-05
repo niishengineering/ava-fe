@@ -229,7 +229,7 @@ export default function StepByStepReveal() {
                 <img src="Icon Image2.png" alt="Card image" />
                 <div className="mt-4">
                   <h2 className="text-xl font-bold mb-2">
-                    All-in-One Chat Management
+                    All-in-One Chat Management.
                   </h2>
                   <p className="text-gray-700 text-base">
                     Keep track of multiple conversations in a centralized
@@ -344,7 +344,8 @@ export default function StepByStepReveal() {
         {/*chat game plan section  */}
         <div
           ref={containerRef}
-          className="mx-auto px-8 py-6 xl:h-screen bg-white rounded-br-[600px]">
+          className="mx-auto px-8 py-6 xl:h-screen bg-white rounded-br-[600px]"
+        >
           <div className="container mx-auto">
             <div className="text-3xl font-semibold py-8 text-center md:text-center">
               <h2>Your Chat Game Plan in 4 Simple Steps</h2>
@@ -363,7 +364,8 @@ export default function StepByStepReveal() {
                             index === visibleSteps.length - 1
                               ? "animate-slideIn"
                               : ""
-                          }`}>
+                          }`}
+                        >
                           <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-lg font-bold">
                             {step.number}
                           </div>
@@ -372,7 +374,8 @@ export default function StepByStepReveal() {
                               index === currentStepIndex
                                 ? "text-blue-600 font-semibold border border-blue-600 bg-blue-50"
                                 : "border border-gray-300 bg-white"
-                            }`}>
+                            }`}
+                          >
                             {step.text}
                           </div>
                         </div>
@@ -474,12 +477,14 @@ export default function StepByStepReveal() {
           <div className="border border-gray-300 rounded-md p-4 mx-auto w-full md:w-1/2">
             <form
               onSubmit={handleSubmit}
-              className="w-full max-w-md mx-auto space-y-4">
+              className="w-full max-w-md mx-auto space-y-4"
+            >
               {/* Name Field */}
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-1">
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Name
                 </label>
                 <input
@@ -495,7 +500,8 @@ export default function StepByStepReveal() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-1">
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Email
                 </label>
                 <input
@@ -511,7 +517,8 @@ export default function StepByStepReveal() {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-gray-700 mb-1">
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Message
                 </label>
                 <textarea
@@ -519,13 +526,15 @@ export default function StepByStepReveal() {
                   name="message"
                   rows={4}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                ></textarea>
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-[#192F5D] text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition">
+                className="w-full bg-[#192F5D] text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition"
+              >
                 Submit Form
               </button>
             </form>
