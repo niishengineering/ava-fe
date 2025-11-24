@@ -255,6 +255,7 @@ const ChatAndDetails: React.FC<ChatDetailsProps> = ({ data }) => {
     const handleReceiveMessage = (socketMsg: any) => {
       // update messages safely
       if (!messages) return;
+      console.log("Received message via socket:", socketMsg);
       setMessages((prev: any) => [...prev, socketMsg.message]);
     };
     socket.on("receive-message", handleReceiveMessage);

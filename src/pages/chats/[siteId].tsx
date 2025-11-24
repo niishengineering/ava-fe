@@ -22,6 +22,7 @@ import ChatBody from "@/libs/Components/Chats/Chat/body";
 import HomeView from "@/libs/Components/Chats/Chat/HomeView";
 import tinycolor from "tinycolor2";
 import { CustomerInterface } from "@/libs/interface";
+import { useTrackCustomerPageVisits } from "@/libs/Hooks/PageTrackerHooks";
 
 export default function Home() {
   const socket = useRef<any>();
@@ -46,6 +47,7 @@ export default function Home() {
   const [messageIsSending, setMessageIsSending] = useState(false);
   const createCustomerMutation = useCreateNewCustomer();
   const sendMessageMutation = useSendMessage();
+  const pageTrackerMutation = useTrackCustomerPageVisits();
   const startChatMutation = useStartChat();
   const [isTyping, setIsTyping] = useState(false);
   const {
@@ -335,6 +337,10 @@ export default function Home() {
     };
 
     socket.current.emit("send-live-monitoring-data", socketData);
+    pageTrackerMutation.mutateAsync({
+      pageUrl: parentUrl,
+      customerId: customer.id,
+    });
   }, [parentUrl, customer, siteId, socket.current]);
 
   // recording analytics
