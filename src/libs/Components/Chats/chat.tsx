@@ -339,7 +339,7 @@ const ChatAndDetails: React.FC<ChatDetailsProps> = ({ data }) => {
         direction="column"
         overflow="hidden"
         border="1px solid rgba(26, 99, 255, 0.33)"
-        bg="rgba(26, 99, 255, 0.04)"
+        bg="gray.50"
         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
         h={{ base: "auto", md: "80vh" }}
       >

@@ -44,6 +44,9 @@ import { useGetAllCustomersChat } from "@/libs/Hooks/chatHooks";
 import { useGetAllTickets } from "@/libs/Hooks/ticketsHooks";
 import { TicketInterface, ChatInterface } from "@/libs/interface";
 import { useSocketStore } from "@/store/socketStore";
+import { useSelectedChatStore } from "@/store/selectedChat";
+import MultiChatWithSidebar from "@/libs/Components/Chats/multiChatComponent";
+import useMultiChatStore from "@/store/multiChatStore";
 
 type Priority = "Low" | "Medium" | "High" | "Critical";
 
@@ -90,6 +93,8 @@ const Indox = () => {
   const [ticketDetailsProps, setTicketDetailsProps] = useState<any>(null);
   const [activeChatTicket, setActiveChatTicket] = useState<string>("All");
   const [user, setUser] = useState<any>();
+  const { data: selectedChat } = useSelectedChatStore();
+  const { openChat, isOverlayOpen } = useMultiChatStore();
 
   const severityColors = {
     Low: "green.500",
@@ -196,12 +201,19 @@ const Indox = () => {
     setChatDetailsProps(data);
   }
 
+  // setting up chat from live monitoring page
+  useEffect(() => {
+    if (!selectedChat) return;
+    setChatDetailsProps(selectedChat);
+  }, [selectedChat]);
+
   return (
     <SidebarWithHeader title="Indox">
       <Flex
         direction={{ base: "column", md: "row" }}
         h={{ base: "auto", md: "full" }}
         gap={{ base: 2, md: "1rem" }}
+        overflow="hidden"
       >
         {/* Sidebar */}
         <Box
@@ -631,81 +643,92 @@ const Indox = () => {
               <Box w={"20%"}>Update</Box>
             </Flex>
             {/* Chat List Body */}
-            {chats?.map((chat: ChatInterface) => {
-              return (
-                <Flex
-                  key={chat?.chat?.id}
-                  onClick={() => {
-                    showChatshandler(chat);
-                  }}
-                  p={{ base: "1rem", md: "0.2rem 1rem" }}
-                  borderBottom={"1px solid rgba(0, 0, 0, 0.10)"}
-                  align="center"
-                  flexDirection={{ base: "column", md: "row" }}
-                  _hover={{
-                    backgroundColor: "rgba(26, 99, 255, 0.33) !important",
-                  }}
-                  cursor={"pointer"}
-                >
-                  <Box p={1} w={{ base: "100%", md: "10%" }}>
-                    <Flex>
-                      <Flag
-                        code={chat?.chat?.customer?.country}
-                        width={"35px"}
+            <Box
+              maxH="400px" // set any height you want
+              overflowY="scroll" // allow scroll
+              css={{
+                "&::-webkit-scrollbar": { display: "none" }, // hide scrollbar (Chrome/Safari)
+                "-ms-overflow-style": "none", // hide scrollbar (IE/Edge)
+                "scrollbar-width": "none", // hide scrollbar (Firefox)
+              }}
+            >
+              {chats?.map((chat: ChatInterface) => {
+                return (
+                  <Flex
+                    key={chat?.chat?.id}
+                    onClick={() => {
+                      // showChatshandler(chat);
+                      openChat(chat);
+                    }}
+                    p={{ base: "1rem", md: "0.2rem 1rem" }}
+                    borderBottom={"1px solid rgba(0, 0, 0, 0.10)"}
+                    align="center"
+                    flexDirection={{ base: "column", md: "row" }}
+                    _hover={{
+                      backgroundColor: "rgba(26, 99, 255, 0.33) !important",
+                    }}
+                    cursor={"pointer"}
+                  >
+                    <Box p={1} w={{ base: "100%", md: "10%" }}>
+                      <Flex>
+                        <Flag
+                          code={chat?.chat?.customer?.country}
+                          width={"35px"}
+                        />
+                      </Flex>
+                    </Box>
+                    <Box p={1} w={{ base: "100%", md: "20%" }}>
+                      <Text noOfLines={1}>
+                        {chat?.chat?.customer?.name || chat?.chat?.customer?.id}
+                      </Text>
+                    </Box>
+                    <Box p={1} w={{ base: "100%", md: "20%" }}>
+                      <Text noOfLines={1}>
+                        {chat?.lastMessage?.messageContent}
+                      </Text>
+                    </Box>
+                    <Flex
+                      p={1}
+                      w={{ base: "100%", md: "20%" }}
+                      justifyContent={"center"}
+                    >
+                      <Avatar
+                        mx={"auto"}
+                        size={"sm"}
+                        name={
+                          `${chat?.chat?.supportAgent?.firstName ?? ""} ${
+                            chat?.chat?.supportAgent?.lastName ?? ""
+                          }`.trim() || "Not available"
+                        }
                       />
                     </Flex>
-                  </Box>
-                  <Box p={1} w={{ base: "100%", md: "20%" }}>
-                    <Text noOfLines={1}>
-                      {chat?.chat?.customer?.name || chat?.chat?.customer?.id}
-                    </Text>
-                  </Box>
-                  <Box p={1} w={{ base: "100%", md: "20%" }}>
-                    <Text noOfLines={1}>
-                      {chat?.lastMessage?.messageContent}
-                    </Text>
-                  </Box>
-                  <Flex
-                    p={1}
-                    w={{ base: "100%", md: "20%" }}
-                    justifyContent={"center"}
-                  >
-                    <Avatar
-                      mx={"auto"}
-                      size={"sm"}
-                      name={
-                        `${chat?.chat?.supportAgent?.firstName ?? ""} ${
-                          chat?.chat?.supportAgent?.lastName ?? ""
-                        }`.trim() || "Not available"
-                      }
-                    />
-                  </Flex>
-                  <Box
-                    w={{ base: "100%", md: "10%" }}
-                    display={"flex"}
-                    justifyContent={"center"}
-                  >
-                    <Flex
-                      bg={chat?.chat?.status === "Open" ? "green" : "red"}
-                      textColor={"white"}
-                      w={"fit-content"}
-                      mx={"auto"}
-                      p={1}
-                      px={4}
-                      textAlign={"center"}
-                      borderRadius={"12px"}
+                    <Box
+                      w={{ base: "100%", md: "10%" }}
+                      display={"flex"}
+                      justifyContent={"center"}
                     >
-                      {chat?.chat?.status}
-                    </Flex>
-                  </Box>
-                  <Box p={1} w={{ base: "100%", md: "20%" }}>
-                    <Text noOfLines={1}>
-                      {getChatSentTime(chat?.lastMessage?.sentAt)}
-                    </Text>
-                  </Box>
-                </Flex>
-              );
-            })}
+                      <Flex
+                        bg={chat?.chat?.status === "Open" ? "green" : "red"}
+                        textColor={"white"}
+                        w={"fit-content"}
+                        mx={"auto"}
+                        p={1}
+                        px={4}
+                        textAlign={"center"}
+                        borderRadius={"12px"}
+                      >
+                        {chat?.chat?.status}
+                      </Flex>
+                    </Box>
+                    <Box p={1} w={{ base: "100%", md: "20%" }}>
+                      <Text noOfLines={1}>
+                        {getChatSentTime(chat?.lastMessage?.sentAt)}
+                      </Text>
+                    </Box>
+                  </Flex>
+                );
+              })}
+            </Box>
 
             {chats && chats?.length === 0 && (
               <Box
@@ -724,7 +747,7 @@ const Indox = () => {
               </Box>
             )}
           </Box>
-
+          {isOverlayOpen && <MultiChatWithSidebar />}
           {/* Chat Component */}
           <Box display={chatDetailsProps ? "block" : "none"}>
             <ChatComponent data={chatDetailsProps} />

@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { getUserToken } from "../utilities";
+import { getToken } from "@chakra-ui/react";
 
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -81,6 +82,32 @@ export async function startChat({
       id,
       propertyChatId,
     });
+    return response.data;
+  } catch (error) {
+    throw new Error("An unexpected error occured");
+  }
+}
+export async function agentStartChat({
+  customerId,
+  propertyChatId,
+}: {
+  customerId: string;
+  propertyChatId: string;
+}) {
+  try {
+    const token = getUserToken();
+    const response = await axios.post(
+      `${backendUrl}/chats/agent-start-chat`,
+      {
+        customerId,
+        propertyChatId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     throw new Error("An unexpected error occured");

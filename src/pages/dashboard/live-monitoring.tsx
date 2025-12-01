@@ -4,6 +4,10 @@ import useCustomerLiveTrackingStore from "@/store/customerLiveTrackingStore";
 import { Box, Heading, Image } from "@chakra-ui/react";
 import PageHistory from "@/libs/Components/LiveMonitoring/PageHistory";
 import { useState } from "react";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import { useAgentStartChat } from "@/libs/Hooks/chatHooks";
+import { useSelectedChatStore } from "@/store/selectedChat";
 
 type Session = {
   id: string;
@@ -45,7 +49,23 @@ type Customer = {
 
 const LiveMonitoring = () => {
   const { customers } = useCustomerLiveTrackingStore();
+  const router = useRouter();
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>();
+  const agentStartChatMutation = useAgentStartChat();
+  const { setChatData } = useSelectedChatStore();
+
+  const startChartHandler = async (customer: Customer) => {
+    try {
+      const data = await agentStartChatMutation.mutateAsync({
+        customerId: customer.id,
+        propertyChatId: customer.siteId,
+      });
+      setChatData({ chat: data.data, lastMessage: null });
+      router.push("/dashboard/inbox");
+    } catch (error) {
+      toast.error("unable to start new chat");
+    }
+  };
 
   return (
     <SidebarWithHeader title="Live Monitoring">
@@ -80,9 +100,9 @@ const LiveMonitoring = () => {
               chats={customer.session.totalLiveChats}
               key={customer.session.ip}
               onViewHistory={() => {
-                console.log(customer);
                 setSelectedCustomer(customer);
               }}
+              onStartNewChat={() => startChartHandler(customer)}
             />
           );
         })}
@@ -92,7 +112,6 @@ const LiveMonitoring = () => {
             userName={selectedCustomer.name as string}
             userAvatar={selectedCustomer.name as string}
             customerId={selectedCustomer.id as string}
-            visits={[]}
             onClose={() => setSelectedCustomer(null)}
           />
         )}

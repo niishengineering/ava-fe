@@ -549,17 +549,11 @@ const CustomerProfile: React.FC<customerProfileProp> = ({ customerData }) => {
       borderRadius="md"
       overflow="hidden"
       border="1px solid rgba(26, 99, 255, 0.33)"
-      bg="rgba(26, 99, 255, 0.04)"
+      bg="gray.50"
       boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
     >
       {/* Details Header */}
-      <Flex
-        align="center"
-        p={4}
-        borderBottom="1px solid #E2E8F0"
-        bg="gray.50"
-        gap={2}
-      >
+      <Flex align="center" p={4} borderBottom="1px solid #E2E8F0" gap={2}>
         <Flag width="20px" code={customer?.country} />
         <Text fontWeight="bold" fontSize="md" noOfLines={1}>
           {`${session?.customer.name}` && `V${customer?.id}`}

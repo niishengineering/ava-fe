@@ -21,7 +21,7 @@ type SessionRowProps = {
   visits: number;
   chats: number;
   onViewHistory: () => void;
-  onStartNewChat?: () => void;
+  onStartNewChat: () => void;
 };
 
 const SessionRow: React.FC<SessionRowProps> = React.memo(
@@ -131,7 +131,10 @@ const SessionRow: React.FC<SessionRowProps> = React.memo(
 
             <button
               className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-              // onClick={() => handleMenuItemClick(onStartNewChat)}
+              onClick={() => {
+                console.log("testing");
+                onStartNewChat();
+              }}
             >
               Start New Chat
             </button>

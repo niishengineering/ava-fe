@@ -5,6 +5,7 @@ import {
   startChat,
   updateChat,
   getAnalyticsChatVolume,
+  agentStartChat,
 } from "../Services/chatServices";
 
 export function useGetAllCustomersChat(
@@ -53,6 +54,13 @@ export function useStartChat() {
     mutationFn: startChat,
   });
 }
+
+export function useAgentStartChat() {
+  return useMutation({
+    mutationFn: agentStartChat,
+  });
+}
+
 export function useUpdateChat() {
   return useMutation({
     mutationFn: updateChat,
