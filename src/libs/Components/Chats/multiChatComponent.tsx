@@ -19,13 +19,19 @@ const MultiChatOverlay: React.FC = () => {
 
   const activeChat = openChats.find((c) => c.id === activeChatId);
 
-  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
+  const chatContentRef = useRef<HTMLDivElement | null>(null);
 
-  // Close only the chat panel when clicking outside
-  const handleOutsideClick = (e: React.MouseEvent) => {
-    console.log("clciked");
-    // if (overlayRef.current && !overlayRef.current.contains(e.target as Node)) {
-    closeOverlay(); // closes only the chat panel, keeps sidebar open
+  const handleFlexClick = (e: React.MouseEvent) => {
+    // Check if click is outside both sidebar and chat content
+    const clickedOutsideSidebar =
+      sidebarRef.current && !sidebarRef.current.contains(e.target as Node);
+    const clickedOutsideChatContent =
+      chatContentRef.current &&
+      !chatContentRef.current.contains(e.target as Node);
+
+    // if (clickedOutsideSidebar && clickedOutsideChatContent) {
+    closeOverlay();
     // }
   };
 
@@ -38,7 +44,6 @@ const MultiChatOverlay: React.FC = () => {
       h="100%"
       bg="rgba(0,0,0,0.35)"
       zIndex={99}
-      onClick={handleOutsideClick}
       overflow="hidden"
     >
       <Flex
@@ -50,7 +55,7 @@ const MultiChatOverlay: React.FC = () => {
         boxShadow="lg"
         zIndex={9999}
         overflowX={"hidden"}
-        ref={overlayRef}
+        onClick={handleFlexClick} // Click handler on the Flex
       >
         {/* LEFT: Sidebar */}
         <Box
@@ -58,6 +63,8 @@ const MultiChatOverlay: React.FC = () => {
           borderColor="gray.200"
           overflowY="auto"
           display={openChats.length > 0 ? "block" : "none"}
+          onClick={(e) => e.stopPropagation()} // Stop propagation
+          h={"fit-content"}
         >
           <Flex
             p={3}
@@ -127,7 +134,12 @@ const MultiChatOverlay: React.FC = () => {
         </Box>
 
         {/* RIGHT: Chat Content */}
-        <Box flex="1" overflow="hidden">
+        <Box
+          flex="1"
+          overflow="hidden"
+          onClick={(e) => e.stopPropagation()}
+          h={"fit-content"}
+        >
           {activeChat ? (
             <ChatAndDetails data={activeChat.chatData} />
           ) : (

@@ -160,3 +160,51 @@ export interface CustomerInterface {
   userAgent: string | null;
   session: SessionInterface;
 }
+
+export interface NotificationContent {
+  type: string | null;
+  username: string | null;
+  timestamp: string | null;
+}
+
+export interface Message {
+  id: string;
+  messageType: "text" | "image" | string;
+  notificationContent: NotificationContent;
+  isRead: boolean;
+  senderId: string;
+  sentAt: string;
+  messageContent: string | null;
+  imageContent: string | null;
+  siteId: string;
+  chatId: string;
+  updatedAt: string;
+  createdAt: string;
+  recipientId: string | null;
+}
+
+export interface SocketMessageInterface {
+  receiverId: string;
+  message: Message;
+  chat: ChatInterface;
+}
+
+export interface SocketMessageCustomerInterface {
+  receiverId: string;
+  message: Message;
+}
+
+export interface ChatWidgetPropertyInterface {
+  id: string;
+  website: string;
+  pingStatus: boolean | null;
+  propertyName: string;
+  propertyImage: string | null;
+  propertyColor: string;
+  welcomeMessage: string;
+  suggestedMessages: string[];
+  chatMode: "manual" | "automatic";
+  propertyOwnerId: string;
+  createdAt: string;
+  updatedAt: string;
+}

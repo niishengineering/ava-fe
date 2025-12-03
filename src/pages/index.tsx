@@ -23,6 +23,7 @@ import { IoChevronDown, IoMenuOutline, IoClose } from "react-icons/io5";
 import NavBar from "@/libs/Components/website/NavBar";
 import FAQSection from "@/libs/Components/website/FAQAccordion";
 import Footer from "@/libs/Components/website/Footer";
+import { useRouter } from "next/router";
 
 type Step = {
   number: string;
@@ -83,15 +84,15 @@ export default function StepByStepReveal() {
       ],
     },
   ];
+  const router = useRouter();
 
   // Handle auth button clicks
   const handleLogin = () => {
-    console.log("Login clicked");
-    // Add login logic here
+    router.push("/sign-in");
   };
 
   const handleSignup = () => {
-    console.log("Signup clicked");
+    router.push("/sign-up");
     // Add signup logic here
   };
 

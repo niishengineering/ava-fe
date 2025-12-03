@@ -19,10 +19,11 @@ interface SideBarFooterProps {
 
 const SideBarFooter: React.FC<SideBarFooterProps> = ({ isSidebarReduced }) => {
   const { data: userData } = useGetUserInfo();
-  const [user, setUser] = useState(userData?.data || {});
+  const [user, setUser] = useState(userData?.user || {});
 
   useEffect(() => {
     console.log("user-from-data", userData);
+    setUser(userData?.user);
   }, [userData]);
 
   return (

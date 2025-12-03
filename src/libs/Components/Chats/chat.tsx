@@ -34,6 +34,7 @@ import usePropertyChatStore from "@/store/propertyChatStore";
 import { useSendMessage } from "@/libs/Hooks/messageHooks";
 import { toast } from "react-toastify";
 import { useSocketStore } from "@/store/socketStore";
+import { SocketMessageInterface } from "@/libs/interface";
 
 interface Message {
   id: string;
@@ -201,6 +202,30 @@ const ChatAndDetails: React.FC<ChatDetailsProps> = ({ data }) => {
     } catch (error) {}
   }
 
+  // setting initial mode of chat and listinting to socket mode changes if user is online
+  useEffect(() => {
+    console.log({ here: data });
+    setMode(data?.chat?.mode as string);
+    socket?.emit("check-user-active", data?.chat?.customer.id);
+  }, [data, socket]);
+
+  //updating online status of customer
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleStatus = ({
+      userId,
+      isActive,
+    }: {
+      userId: string;
+      isActive: boolean;
+    }) => {
+      setCustomerIsActive(isActive);
+    };
+
+    socket.on("user-active-status", handleStatus);
+  }, [socket, data]);
+
   useEffect(() => {
     scrollToBottom();
   }, [messagesData]);
@@ -223,6 +248,7 @@ const ChatAndDetails: React.FC<ChatDetailsProps> = ({ data }) => {
 
   // Customer  active status handling and user intitialztion
   useEffect(() => {
+    console.log("reset data");
     if (!userData?.user) return;
     setUser(userData.user);
 
@@ -246,7 +272,7 @@ const ChatAndDetails: React.FC<ChatDetailsProps> = ({ data }) => {
         socket.off("active-users-updated", handleActiveUsersUpdated);
       }
     };
-  }, [userData, data?.chat?.customer?.id, socket]);
+  }, [userData, data?.chat?.customer?.id, socket, data?.chat]);
 
   // Receiving messages via socket
   useEffect(() => {
@@ -254,7 +280,9 @@ const ChatAndDetails: React.FC<ChatDetailsProps> = ({ data }) => {
 
     const handleReceiveMessage = (socketMsg: any) => {
       // update messages safely
+      console.log({ socketMsg });
       if (!messages) return;
+      if (socketMsg?.message?.chatId !== chat?.id) return;
       console.log("Received message via socket:", socketMsg);
       setMessages((prev: any) => [...prev, socketMsg.message]);
     };

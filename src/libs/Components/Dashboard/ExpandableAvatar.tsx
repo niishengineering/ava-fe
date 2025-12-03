@@ -23,6 +23,9 @@ const ExpandableAvatarCard: React.FC<ExpandableAvatarCardProp> = ({ user }) => {
   const updateSelectedProperty = usePropertyChatStore(
     (state: any) => state.editSelectedProperty
   );
+  const selectedProperty = usePropertyChatStore(
+    (state: any) => state.selectedProperty
+  );
 
   return (
     <Stack>
@@ -80,39 +83,49 @@ const ExpandableAvatarCard: React.FC<ExpandableAvatarCardProp> = ({ user }) => {
                 border="1px solid white"
               >
                 {user?.properties &&
-                  user?.properties.map((property: any, index: number) => (
-                    <Flex
-                      align="center"
-                      bg="black"
-                      color="white"
-                      onClick={() => updateSelectedProperty(property?.id)}
-                      p={4}
-                      borderRadius="md"
-                      key={property.id}
-                      cursor={"pointer"}
-                      maxW="sm"
-                      _hover={{ background: "grey" }}
-                    >
-                      {/* Avatar */}
-                      <Avatar
-                        name={property.propertyName}
-                        src={property.propertyImage} // Use avatarUrl if provided
-                        bg="yellow.500"
+                  user?.properties.map((property: any, index: number) => {
+                    const isActive = selectedProperty === property?.id;
+
+                    return (
+                      <Flex
+                        align="center"
+                        bg={isActive ? "grey" : "black"}
                         color="white"
-                        size="sm"
-                        fontWeight="bold"
-                        mr={3}
-                      />
+                        onClick={() => updateSelectedProperty(property?.id)}
+                        p={4}
+                        borderRadius="md"
+                        key={property.id}
+                        cursor={"pointer"}
+                        maxW="sm"
+                        _hover={{ background: "grey" }}
+                        transition="background 0.2s ease"
+                        border={
+                          isActive ? "2px solid teal" : "2px solid transparent"
+                        }
+                      >
+                        {/* Avatar */}
+                        <Avatar
+                          name={property.propertyName}
+                          src={property.propertyImage} // Use avatarUrl if provided
+                          bg={isActive ? "teal.500" : "yellow.500"}
+                          color="white"
+                          size="sm"
+                          fontWeight="bold"
+                          mr={3}
+                        />
 
-                      {/* Text */}
-                      <Text flex="1" fontSize="sm" fontWeight="bold">
-                        {property.propertyName}
-                      </Text>
+                        {/* Text */}
+                        <Text flex="1" fontSize="sm" fontWeight="bold">
+                          {property.propertyName}
+                        </Text>
 
-                      {/* Check Icon */}
-                      <Icon as={CheckIcon} color="white" boxSize={3} />
-                    </Flex>
-                  ))}
+                        {/* Check Icon - only show when active */}
+                        {isActive && (
+                          <Icon as={CheckIcon} color="teal.300" boxSize={4} />
+                        )}
+                      </Flex>
+                    );
+                  })}
               </Box>
             </Stack>
           </motion.div>

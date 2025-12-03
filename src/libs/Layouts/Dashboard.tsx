@@ -357,8 +357,10 @@ const SidebarContent = ({
         p={isMobileDrawer ? 4 : sidebarReducedData.isReduced ? 2 : 2}
         borderTop={"1px solid rgba(255, 255, 255, 0.31)"}
         borderBottom={"1px solid rgba(255, 255, 255, 0.31)"}
-        display={"block"}
+        display={"flex"}
         h={"10vh"}
+        alignItems={"center"}
+        justifyContent={"center"}
       >
         {sidebarReducedData.isReduced ? (
           <Image

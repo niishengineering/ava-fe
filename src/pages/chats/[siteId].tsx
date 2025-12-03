@@ -23,6 +23,7 @@ import HomeView from "@/libs/Components/Chats/Chat/HomeView";
 import tinycolor from "tinycolor2";
 import { CustomerInterface } from "@/libs/interface";
 import { useTrackCustomerPageVisits } from "@/libs/Hooks/PageTrackerHooks";
+import { SocketMessageCustomerInterface } from "@/libs/interface";
 
 export default function Home() {
   const socket = useRef<any>();
@@ -403,7 +404,7 @@ export default function Home() {
   // socket connection
   useEffect(() => {
     socket.current = io(`${baseURL}`); // Ensure the protocol is correct (http/https).
-    const socketUserData = { userId: customer?.id };
+    const socketUserData = { userId: customer?.id, siteId };
     socket.current.emit("add-new-user", socketUserData);
 
     return () => {
@@ -419,6 +420,7 @@ export default function Home() {
 
     const handleReceiveMessage = (data: any) => {
       if (!customerMessages) return;
+      if (data.message.chatId !== selectedChat?.chat.id) return;
       setcustomerMessages((prev: any) => [...prev, data.message]);
       setIsTyping(false);
     };

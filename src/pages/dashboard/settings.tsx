@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, Copy, Plus, X, Upload, Save } from "lucide-react";
+import { ChevronDown, Copy, Plus, X, Upload, Save, Pi } from "lucide-react";
 import SidebarWithHeader from "@/libs/Layouts/Dashboard";
 import { useGetWidgetProperty } from "@/libs/Hooks/propertyChatHook";
 import usePropertyChatStore from "@/store/propertyChatStore";
 import { useUpdateWidgetProperty } from "@/libs/Hooks/propertyChatHook";
 import { toast } from "react-toastify";
 import LoadingSpinner from "@/libs/Components/loadingSpinner";
+import PingStatusModal from "@/libs/Components/Dashboard/PingStatusModal";
 
 interface PropertyData {
   id: string;
@@ -48,6 +49,7 @@ const PropertyOverview: React.FC = () => {
   const [newSuggestedMessage, setNewSuggestedMessage] = useState("");
   const [isEdited, setIsEdited] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showPingStatusModal, setShowPingStatusModal] = useState(false);
 
   // Separate states for image handling
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
@@ -242,6 +244,18 @@ const PropertyOverview: React.FC = () => {
                 <span>{isSaving ? "Saving..." : "Save Changes"}</span>
               </button>
             )}
+
+            <button
+              onClick={() => setShowPingStatusModal(true)}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              Check Website Status
+            </button>
+
+            <PingStatusModal
+              isOpen={showPingStatusModal}
+              onClose={() => setShowPingStatusModal(false)}
+            />
           </div>
 
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-6">

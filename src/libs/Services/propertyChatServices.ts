@@ -39,3 +39,22 @@ export async function updateWidgetProperty({
     );
   }
 }
+
+export async function pingWidgetProperty({ id }: { id: string }) {
+  try {
+    const response = await axios.patch(
+      `${backendUrl}/property-chat/property-ping/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error?.response?.data?.message || "An unexpected error occurred"
+    );
+  }
+}
